@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Who Is More Handsome?</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(0, 119, 255, .18), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(255, 0, 55, .18), transparent 30%),
+        #050713;
+    color: white;
+    min-height: 100vh;
+}
+
+/* NAVBAR */
+
+nav {
+    width: 100%;
+    padding: 20px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(5, 7, 19, .85);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.logo span {
+    color: #ffd21f;
+}
+
+.live {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #ff4757;
+}
+
+.live-dot {
+    width: 9px;
+    height: 9px;
+    background: #ff4757;
+    border-radius: 50%;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        opacity: .2;
+    }
+}
+
+/* HERO */
+
+.hero {
+    text-align: center;
+    padding: 75px 20px 45px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 30px;
+    background: rgba(255,255,255,.05);
+    color: #ffd21f;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(45px, 8vw, 90px);
+    line-height: .95;
+    font-weight: 1000;
+    letter-spacing: -4px;
+}
+
+.hero h1 span {
+    background: linear-gradient(90deg, #ffd21f, #ff7b00);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    margin-top: 25px;
+    color: #aeb4c7;
+    font-size: 17px;
+}
+
+/* VS AREA */
+
+.contestants {
+    max-width: 1150px;
+    margin: 30px auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 100px 1fr;
+    align-items: center;
+    gap: 20px;
+}
+
+.card {
+    position: relative;
+    padding: 35px;
+    border-radius: 30px;
+    overflow: hidden;
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+}
+
+.sanwar {
+    background:
+        linear-gradient(145deg, rgba(0,136,255,.3), rgba(4,12,30,.95));
+    border: 1px solid #168cff;
+    box-shadow: 0 0 50px rgba(0,136,255,.12);
+}
+
+.aljun {
+    background:
+        linear-gradient(145deg, rgba(255,40,70,.3), rgba(30,5,15,.95));
+    border: 1px solid #ff304c;
+    box-shadow: 0 0 50px rgba(255,40,70,.12);
+}
+
+.avatar {
+    width: 180px;
+    height: 180px;
+    margin: auto;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 65px;
+    font-weight: 1000;
+    border: 5px solid rgba(255,255,255,.8);
+    box-shadow: 0 15px 40px rgba(0,0,0,.4);
+}
+
+.sanwar .avatar {
+    background: linear-gradient(135deg, #087eff, #00d4ff);
+}
+
+.aljun .avatar {
+    background: linear-gradient(135deg, #ff1744, #ff7b00);
+}
+
+.card h2 {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 30px;
+}
+
+.nickname {
+    text-align: center;
+    margin-top: 7px;
+    color: #aeb4c7;
+    font-size: 14px;
+}
+
+.vs {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #090d1c;
+    border: 3px solid #ffd21f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: 1000;
+    color: #ffd21f;
+    box-shadow: 0 0 30px rgba(255,210,31,.25);
+    z-index: 5;
+}
+
+/* VOTE BUTTON */
+
+.vote-btn {
+    width: 100%;
+    margin-top: 25px;
+    padding: 17px;
+    border: none;
+    border-radius: 15px;
+    color: white;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.vote-btn:hover {
+    transform: scale(1.03);
+}
+
+.vote-btn:active {
+    transform: scale(.96);
+}
+
+.blue-btn {
+    background: linear-gradient(90deg, #087eff, #00b7ff);
+    box-shadow: 0 8px 25px rgba(0,136,255,.3);
+}
+
+.red-btn {
+    background: linear-gradient(90deg, #ff1744, #ff5a36);
+    box-shadow: 0 8px 25px rgba(255,23,68,.3);
+}
+
+/* RESULTS */
+
+.results {
+    max-width: 1000px;
+    margin: 70px auto;
+    padding: 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 35px;
+    margin-bottom: 35px;
+}
+
+.result-box {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 30px;
+    border-radius: 25px;
+}
+
+.result-row {
+    margin-bottom: 28px;
+}
+
+.result-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.bar {
+    height: 22px;
+    background: #171b2b;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 1s ease;
+    border-radius: 20px;
+}
+
+.blue-bar {
+    background: linear-gradient(90deg, #087eff, #00d4ff);
+}
+
+.red-bar {
+    background: linear-gradient(90deg, #ff1744, #ff7b00);
+}
+
+.total {
+    text-align: center;
+    margin-top: 25px;
+    color: #8e96ad;
+}
+
+/* WINNER */
+
+.winner {
+    max-width: 700px;
+    margin: 30px auto 80px;
+    padding: 35px;
+    text-align: center;
+    border-radius: 25px;
+    background: linear-gradient(
+        135deg,
+        rgba(255,210,31,.12),
+        rgba(255,255,255,.03)
+    );
+    border: 1px solid rgba(255,210,31,.3);
+}
+
+.winner h2 {
+    font-size: 25px;
+}
+
+#winnerText {
+    margin-top: 12px;
+    font-size: 35px;
+    font-weight: 1000;
+    color: #ffd21f;
+}
+
+/* FUNNY SECTION */
+
+.funny {
+    text-align: center;
+    padding: 30px 20px 70px;
+}
+
+.funny h2 {
+    font-size: 35px;
+}
+
+.funny p {
+    margin-top: 12px;
+    color: #9299ad;
+}
+
+/* FOOTER */
+
+footer {
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding: 30px;
+    text-align: center;
+    color: #777f96;
+}
+
+/* POPUP */
+
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.75);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.popup-box {
+    width: 90%;
+    max-width: 430px;
+    padding: 40px;
+    border-radius: 25px;
+    background: #0d1120;
+    border: 1px solid rgba(255,255,255,.15);
+    text-align: center;
+    animation: popup .3s ease;
+}
+
+@keyframes popup {
+    from {
+        transform: scale(.7);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.popup-box .emoji {
+    font-size: 60px;
+}
+
+.popup-box h2 {
+    margin-top: 15px;
+}
+
+.popup-box p {
+    margin-top: 10px;
+    color: #9da4b8;
+    line-height: 1.6;
+}
+
+.close-btn {
+    margin-top: 25px;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 12px;
+    background: #ffd21f;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* MOBILE */
+
+@media (max-width: 750px) {
+
+    nav {
+        padding: 18px 20px;
+    }
+
+    .hero {
+        padding-top: 50px;
+    }
+
+    .hero h1 {
+        letter-spacing: -2px;
+    }
+
+    .contestants {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+    }
+
+    .vs {
+        margin: -10px auto;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .avatar {
+        width: 140px;
+        height: 140px;
+        font-size: 50px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVIGATION -->
+
+<nav>
+    <div class="logo">👑 HAND<span>SOME</span></div>
+
+    <div class="live">
+        <div class="live-dot"></div>
+        LIVE VOTING
+    </div>
+</nav>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <div class="badge">
+        🔥 THE ULTIMATE POGI BATTLE 🔥
+    </div>
+
+    <h1>
+        WHO'S<br>
+        <span>MORE HANDSOME?</span>
+    </h1>
+
+    <p>
+        Two legends. One crown. 😂<br>
+        <strong>You decide who deserves the title!</strong>
+    </p>
+
+</section>
+
+
+<!-- CONTESTANTS -->
+
+<section class="contestants">
+
+    <!-- SANWAR -->
+
+    <div class="card sanwar">
+
+        <div class="avatar">
+            SA
+        </div>
+
+        <h2>SANWAR ARNIDO</h2>
+
+        <div class="nickname">
+            😎 The Blue Team • Certified Pogi
+        </div>
+
+        <button
+            class="vote-btn blue-btn"
+            onclick="vote('sanwar')">
+            💙 VOTE SANWAR
+        </button>
+
+    </div>
+
+
+    <!-- VS -->
+
+    <div class="vs">
+        VS
+    </div>
+
+
+    <!-- ALJUN -->
+
+    <div class="card aljun">
+
+        <div class="avatar">
+            AN
+        </div>
+
+        <h2>ALJUN NATINDIM</h2>
+
+        <div class="nickname">
+            🔥 The Red Team • Pogi Overload
+        </div>
+
+        <button
+            class="vote-btn red-btn"
+            onclick="vote('aljun')">
+            ❤️ VOTE ALJUN
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- RESULTS -->
+
+<section class="results">
+
+    <h2 class="section-title">
+        📊 LIVE RESULTS
+    </h2>
+
+    <div class="result-box">
+
+        <!-- SANWAR RESULT -->
+
+        <div class="result-row">
+
+            <div class="result-info">
+                <span>💙 Sanwar Arnido</span>
+                <span id="sanwarPercent">0%</span>
+            </div>
+
+            <div class="bar">
+                <div
+                    id="sanwarBar"
+                    class="bar-fill blue-bar">
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- ALJUN RESULT -->
+
+        <div class="result-row">
+
+            <div class="result-info">
+                <span>❤️ Aljun Natindim</span>
+                <span id="aljunPercent">0%</span>
+            </div>
+
+            <div class="bar">
+                <div
+                    id="aljunBar"
+                    class="bar-fill red-bar">
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="total">
+            👥 Total Votes:
+            <strong id="totalVotes">0</strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- WINNER -->
+
+<section class="winner">
+
+    <h2>👑 CURRENT CHAMPION 👑</h2>
+
+    <div id="winnerText">
+        Waiting for votes...
+    </div>
+
+</section>
+
+
+<!-- FUNNY MESSAGE -->
+
+<section class="funny">
+
+    <h2>😂 IMPORTANT ANNOUNCEMENT</h2>
+
+    <p>
+        Please vote responsibly.
+        Friendship may be damaged after the results. 💀
+    </p>
+
+    <p>
+        No fighting. No crying. No "bias man!" 😂
+    </p>
+
+</section>
+
+
+<footer>
+    Made with ❤️, JavaScript & Pogi Energy 😎
+    <br><br>
+    © 2026 Handsome Online Voting
+</footer>
+
+
+<!-- POPUP -->
+
+<div id="popup" class="popup">
+
+    <div class="popup-box">
+
+        <div class="emoji" id="popupEmoji">
+            🗳️
+        </div>
+
+        <h2 id="popupTitle">
+            Vote Recorded!
+        </h2>
+
+        <p id="popupMessage">
+            Your vote has been counted.
+        </p>
+
+        <button
+            class="close-btn"
+            onclick="closePopup()">
+            OKAY 😎
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ==============================
+   VOTING SYSTEM
+============================== */
+
+let sanwarVotes =
+    Number(localStorage.getItem("sanwarVotes")) || 0;
+
+let aljunVotes =
+    Number(localStorage.getItem("aljunVotes")) || 0;
+
+let hasVoted =
+    localStorage.getItem("hasVoted") === "true";
+
+
+/* ==============================
+   VOTE FUNCTION
+============================== */
+
+function vote(person) {
+
+    if (hasVoted) {
+
+        showPopup(
+            "⚠️",
+            "You Already Voted!",
+            "Nice try 😂 You can only vote once on this browser."
+        );
+
+        return;
+    }
+
+
+    if (person === "sanwar") {
+
+        sanwarVotes++;
+
+        localStorage.setItem(
+            "sanwarVotes",
+            sanwarVotes
+        );
+
+        showPopup(
+            "💙",
+            "SANWAR GOT YOUR VOTE!",
+            "Your vote has been successfully counted. 😎"
+        );
+
+    }
+
+
+    if (person === "aljun") {
+
+        aljunVotes++;
+
+        localStorage.setItem(
+            "aljunVotes",
+            aljunVotes
+        );
+
+        showPopup(
+            "❤️",
+            "ALJUN GOT YOUR VOTE!",
+            "Your vote has been successfully counted. 🔥"
+        );
+
+    }
+
+
+    hasVoted = true;
+
+    localStorage.setItem(
+        "hasVoted",
+        "true"
+    );
+
+
+    updateResults();
+}
+
+
+/* ==============================
+   UPDATE RESULTS
+============================== */
+
+function updateResults() {
+
+    const total =
+        sanwarVotes + aljunVotes;
+
+
+    document.getElementById(
+        "totalVotes"
+    ).textContent = total;
+
+
+    if (total === 0) {
+
+        document.getElementById(
+            "sanwarPercent"
+        ).textContent = "0%";
+
+        document.getElementById(
+            "aljunPercent"
+        ).textContent = "0%";
+
+        return;
+    }
+
+
+    const sanwarPercent =
+        Math.round(
+            (sanwarVotes / total) * 100
+        );
+
+
+    const aljunPercent =
+        100 - sanwarPercent;
+
+
+    document.getElementById(
+        "sanwarPercent"
+    ).textContent =
+        sanwarPercent + "%";
+
+
+    document.getElementById(
+        "aljunPercent"
+    ).textContent =
+        aljunPercent + "%";
+
+
+    document.getElementById(
+        "sanwarBar"
+    ).style.width =
+        sanwarPercent + "%";
+
+
+    document.getElementById(
+        "aljunBar"
+    ).style.width =
+        aljunPercent + "%";
+
+
+    /* WINNER */
+
+    const winner =
+        document.getElementById(
+            "winnerText"
+        );
+
+
+    if (sanwarVotes > aljunVotes) {
+
+        winner.innerHTML =
+            "💙 SANWAR ARNIDO 👑";
+
+    }
+
+    else if (aljunVotes > sanwarVotes) {
+
+        winner.innerHTML =
+            "❤️ ALJUN NATINDIM 👑";
+
+    }
+
+    else {
+
+        winner.innerHTML =
+            "🤝 IT'S A TIE!";
+
+    }
+
+}
+
+
+/* ==============================
+   POPUP
+============================== */
+
+function showPopup(
+    emoji,
+    title,
+    message
+) {
+
+    document.getElementById(
+        "popupEmoji"
+    ).textContent = emoji;
+
+
+    document.getElementById(
+        "popupTitle"
+    ).textContent = title;
+
+
+    document.getElementById(
+        "popupMessage"
+    ).textContent = message;
+
+
+    document.getElementById(
+        "popup"
+    ).style.display = "flex";
+
+}
+
+
+function closePopup() {
+
+    document.getElementById(
+        "popup"
+    ).style.display = "none";
+
+}
+
+
+/* ==============================
+   START
+============================== */
+
+updateResults();
+
+</script>
+
+</body>
+</html>
